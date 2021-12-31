@@ -5,8 +5,7 @@ import CanvasDrawer from "@/libraries/canvasDrawer";
 import InputRange from "@/components/inputrange";
 
 export default function Home() {
-    const inputBackground = useRef(),
-        canvas = useRef(),
+    const canvas = useRef(),
         canvasdrawer = useRef(),
         [inputBackgroundScale,setInputBackgroundScale] = useState(100),
         [inputBackgroundPosX,setInputBackgroundPosX] = useState(0),
