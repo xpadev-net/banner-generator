@@ -14,7 +14,11 @@ export default function Home() {
         [inputBackgroundPosY,setInputBackgroundPosY] = useState(0),
         [inputCardBackground,setInputCardBackground] = useState("#ffffff"),
         [inputCardMargin,setInputCardMargin] = useState(50),
-        [inputCardRadius,setInputCardRadius] = useState(50);
+        [inputCardRadius,setInputCardRadius] = useState(50),
+        [inputCardShadowColor,setInputCardShadowColor] = useState("#000000"),
+        [inputCardShadowBlur,setInputCardShadowBlur] = useState(50),
+        [inputCardShadowOffsetX,setInputCardShadowOffsetX] = useState(0),
+        [inputCardShadowOffsetY,setInputCardShadowOffsetY] = useState(0);
     useEffect(()=>{
         if (isElement(canvas.current)) {
             canvasdrawer.current = new CanvasDrawer(canvas.current);
@@ -32,7 +36,8 @@ export default function Home() {
                     const img = document.createElement('img');
                     img.src = reader.result;
                     img.onload=()=>{
-                        canvasdrawer.current.setBackground(img);
+                        canvasdrawer.current.backgroundImage=img;
+                        canvasdrawer.current.updateCanvas();
                     }
                 }
                 // ファイル読み込みを実行
@@ -42,27 +47,53 @@ export default function Home() {
     },[inputBackground]);
     const inputBackgroundScaleOnChange = (e) => {
         setInputBackgroundScale(e.target.value);
-        canvasdrawer.current.setBackgroundScale(e.target.value/100);
+        canvasdrawer.current.backgroundScale=e.target.value/100;
+        canvasdrawer.current.updateCanvas();
     }
     const inputBackgroundPosXOnChange = (e) => {
         setInputBackgroundPosX(e.target.value);
-        canvasdrawer.current.setBackgroundPosX(e.target.value/100);
+        canvasdrawer.current.backgroundPosX=e.target.value/100;
+        canvasdrawer.current.updateCanvas();
     }
     const inputBackgroundPosYOnChange = (e) => {
         setInputBackgroundPosY(e.target.value);
-        canvasdrawer.current.setBackgroundPosY(e.target.value/100);
+        canvasdrawer.current.backgroundPosY=(e.target.value/100);
+        canvasdrawer.current.updateCanvas();
     }
     const inputCardBackgroundOnChange = (e) => {
         setInputCardBackground(e.target.value);
-        canvasdrawer.current.setCardBackground(e.target.value);
+        canvasdrawer.current.cardBackground=(e.target.value);
+        canvasdrawer.current.updateCanvas();
     }
     const inputCardMarginOnChange = (e) => {
         setInputCardMargin(e.target.value);
-        canvasdrawer.current.setCardMargin(e.target.value);
+        canvasdrawer.current.cardMargin=Number(e.target.value);
+        canvasdrawer.current.updateCanvas();
     }
     const inputCardRadiusOnChange = (e) => {
         setInputCardRadius(e.target.value);
-        canvasdrawer.current.setCardRadius(e.target.value);
+        canvasdrawer.current.cardCornerRadius=Number(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputCardShadowColorOnChange = (e) => {
+        setInputCardShadowColor(e.target.value);
+        canvasdrawer.current.cardShadowColor=(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputCardShadowBlurOnChange = (e) => {
+        setInputCardShadowBlur(e.target.value);
+        canvasdrawer.current.cardShadowBlur=(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputCardShadowOffsetXOnChange = (e) => {
+        setInputCardShadowOffsetX(e.target.value);
+        canvasdrawer.current.cardShadowOffsetX=(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputCardShadowOffsetYOnChange = (e) => {
+        setInputCardShadowOffsetY(e.target.value);
+        canvasdrawer.current.cardShadowOffsetY=(e.target.value);
+        canvasdrawer.current.updateCanvas();
     }
     return (
         <>
@@ -91,6 +122,25 @@ export default function Home() {
                         <p><InputRange min={0} max={200} step={1} value={inputCardRadius} onchange={inputCardRadiusOnChange} unit={"px"}/></p>
                         <h3>背景色</h3>
                         <p><label><input type="color" value={inputCardBackground} onChange={inputCardBackgroundOnChange}/></label></p>
+                        <h3>影</h3>
+                        <table>
+                            <tr>
+                                <th>色</th>
+                                <td><label><input type="color" value={inputCardShadowColor} onChange={inputCardShadowColorOnChange}/></label></td>
+                            </tr>
+                            <tr>
+                                <th>ぼかし</th>
+                                <td><InputRange min={0} max={200} step={1} value={inputCardShadowBlur} onchange={inputCardShadowBlurOnChange} unit={"px"}/></td>
+                            </tr>
+                            <tr>
+                                <th>横ズレ</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputCardShadowOffsetX} onchange={inputCardShadowOffsetXOnChange} unit={"%"}/></td>
+                            </tr>
+                            <tr>
+                                <th>縦ズレ</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputCardShadowOffsetY} onchange={inputCardShadowOffsetYOnChange} unit={"%"}/></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>

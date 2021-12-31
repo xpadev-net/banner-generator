@@ -8,35 +8,11 @@ class CanvasDrawer {
         this.cardCornerRadius=50;
         this.cardBackground="#ffffff";
         this.cardMargin = 50;
+        this.cardShadowColor="#000000";
+        this.cardShadowBlur=50;
+        this.cardShadowOffsetX=0;
+        this.cardShadowOffsetY=0;
         this.updateCanvas()
-    }
-    setBackground(img){
-        this.backgroundImage = img;
-        this.updateCanvas();
-    }
-    setBackgroundScale(scale){
-        this.backgroundScale=scale;
-        this.updateCanvas();
-    }
-    setBackgroundPosX(scale){
-        this.backgroundPosX=scale;
-        this.updateCanvas();
-    }
-    setBackgroundPosY(scale){
-        this.backgroundPosY=scale;
-        this.updateCanvas();
-    }
-    setCardBackground(color){
-        this.cardBackground=color;
-        this.updateCanvas();
-    }
-    setCardMargin(margin){
-        this.cardMargin=Number(margin);
-        this.updateCanvas();
-    }
-    setCardRadius(radius){
-        this.cardCornerRadius=Number(radius);
-        this.updateCanvas();
     }
     drawsq(posX,posY,width,height,radius) {
         this.context.beginPath();
@@ -53,6 +29,9 @@ class CanvasDrawer {
     updateCanvas(){
         this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
         this.context.fillStyle="#c0c0c0";
+        this.context.shadowBlur=0;
+        this.context.shadowOffsetX=0;
+        this.context.shadowOffsetY=0;
         this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
         if (this.backgroundImage){
             this.context.drawImage(
@@ -63,6 +42,10 @@ class CanvasDrawer {
         }
         this.context.fillStyle=this.cardBackground;
         this.context.strokeStyle=this.cardBackground;
+        this.context.shadowColor=this.cardShadowColor;
+        this.context.shadowBlur=this.cardShadowBlur;
+        this.context.shadowOffsetX=this.cardShadowOffsetX;
+        this.context.shadowOffsetY=this.cardShadowOffsetY;
         if (this.cardCornerRadius>0){
             this.drawsq(this.cardMargin,this.cardMargin,this.canvas.width-this.cardMargin*2,this.canvas.height-this.cardMargin*2,this.cardCornerRadius);
         }else{
