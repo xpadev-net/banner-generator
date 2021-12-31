@@ -2,6 +2,7 @@ class CanvasDrawer {
     constructor(canvas) {
         this.canvas = canvas;
         this.context = canvas.getContext("2d");
+        this.backgroundImage=null;
         this.backgroundScale=1;
         this.backgroundPosX=0;
         this.backgroundPosY=0;
@@ -12,21 +13,37 @@ class CanvasDrawer {
         this.cardShadowBlur=50;
         this.cardShadowOffsetX=0;
         this.cardShadowOffsetY=0;
-        this.updateCanvas()
+        this.iconImage=null;
+        this.iconRadius=50;
+        this.iconScale=1;
+        this.iconOffsetX=0;
+        this.iconOffsetY=0;
+        this.iconBorder=5;
+        this.iconShadowColor="#000000";
+        this.iconShadowBlur=50;
+        this.iconShadowOffsetX=0;
+        this.iconShadowOffsetY=0;
+        this.nameBig="名前(上)";
+        this.nameBigColor="#000000";
+        this.nameBigFont=`normal 600 100px Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic`;
+        this.nameSmall="名前(下)";
+        this.nameSmallColor="#000000";
+        this.nameSmallFont=`normal 100 20px Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic`;
+        this.context.textBaseline="middle";
+        this.updateCanvas();
     }
     drawsq(posX,posY,width,height,radius) {
-        this.context.beginPath();
-        this.context.lineWidth = 1;
+        if (radius<0){
+            radius=0;
+        }
         this.context.moveTo(posX,posY + radius);
         this.context.arc(posX+radius,posY+height-radius,radius,Math.PI,Math.PI*0.5,true);
-        this.context.arc(posX+width-radius,posY+height-radius,radius,Math.PI*0.5,0,1);
-        this.context.arc(posX+width-radius,posY+radius,radius,0,Math.PI*1.5,1);
-        this.context.arc(posX+radius,posX+radius,radius,Math.PI*1.5,Math.PI,1);
-        this.context.closePath();
-        this.context.stroke();
-        this.context.fill();
+        this.context.arc(posX+width-radius,posY+height-radius,radius,Math.PI*0.5,0,true);
+        this.context.arc(posX+width-radius,posY+radius,radius,0,Math.PI*1.5,true);
+        this.context.arc(posX+radius,posY+radius,radius,Math.PI*1.5,Math.PI,true);
     }
     updateCanvas(){
+        this.context.save();
         this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
         this.context.fillStyle="#c0c0c0";
         this.context.shadowBlur=0;
@@ -47,10 +64,42 @@ class CanvasDrawer {
         this.context.shadowOffsetX=this.cardShadowOffsetX;
         this.context.shadowOffsetY=this.cardShadowOffsetY;
         if (this.cardCornerRadius>0){
+            this.context.beginPath();
+            this.context.lineWidth = 1;
             this.drawsq(this.cardMargin,this.cardMargin,this.canvas.width-this.cardMargin*2,this.canvas.height-this.cardMargin*2,this.cardCornerRadius);
+            this.context.closePath();
+            this.context.stroke();
+            this.context.fill();
         }else{
             this.context.fillRect(this.cardMargin,this.cardMargin,this.canvas.width-this.cardMargin*2,this.canvas.height-this.cardMargin*2)
         }
+        this.context.shadowColor=this.iconShadowColor;
+        this.context.shadowBlur=this.iconShadowBlur;
+        this.context.shadowOffsetX=this.iconShadowOffsetX;
+        this.context.shadowOffsetY=this.iconShadowOffsetY;
+        this.context.beginPath();
+        this.context.lineWidth = 1;
+        this.drawsq(200,100,300,300,this.iconRadius);
+        this.context.closePath();
+        this.context.stroke();
+        this.context.fill();
+        if (this.iconImage){
+            this.context.beginPath();
+            this.context.lineWidth = 1;
+            this.drawsq(200+this.iconBorder,100+this.iconBorder,300-this.iconBorder*2,300-this.iconBorder*2,this.iconRadius-this.iconBorder);
+            this.context.clip();
+            this.context.drawImage(this.iconImage,0,0,this.iconImage.width,this.iconImage.height,200+this.iconOffsetX*this.iconImage.width,100+this.iconOffsetY*this.iconImage.height,this.iconImage.width*this.iconScale,this.iconImage.height*this.iconScale);
+        }
+        this.context.shadowBlur=0;
+        this.context.shadowOffsetX=0;
+        this.context.shadowOffsetY=0;
+        this.context.fillStyle=this.nameBigColor;
+        this.context.font=this.nameBigFont;
+        this.context.fillText(this.nameBig,600,250);
+        this.context.fillStyle=this.nameSmallColor;
+        this.context.font=this.nameSmallFont;
+        this.context.fillText(this.nameSmall,600,330);
+        this.context.restore();
     }
 }
 export default CanvasDrawer;

@@ -5,8 +5,7 @@ import CanvasDrawer from "@/libraries/canvasDrawer";
 import InputRange from "@/components/inputrange";
 
 export default function Home() {
-    const inputName = useRef(),
-        inputBackground = useRef(),
+    const inputBackground = useRef(),
         canvas = useRef(),
         canvasdrawer = useRef(),
         [inputBackgroundScale,setInputBackgroundScale] = useState(100),
@@ -18,33 +17,45 @@ export default function Home() {
         [inputCardShadowColor,setInputCardShadowColor] = useState("#000000"),
         [inputCardShadowBlur,setInputCardShadowBlur] = useState(50),
         [inputCardShadowOffsetX,setInputCardShadowOffsetX] = useState(0),
-        [inputCardShadowOffsetY,setInputCardShadowOffsetY] = useState(0);
+        [inputCardShadowOffsetY,setInputCardShadowOffsetY] = useState(0),
+        [inputIconScale,setInputIconScale] = useState(100),
+        [inputIconRadius,setInputIconRadius] = useState(100),
+        [inputIconBorder,setInputIconBorder] = useState(5),
+        [inputIconOffsetX,setInputIconOffsetX] = useState(0),
+        [inputIconOffsetY,setInputIconOffsetY] = useState(0),
+        [inputIconShadowColor,setInputIconShadowColor] = useState("#000000"),
+        [inputIconShadowBlur,setInputIconShadowBlur] = useState(50),
+        [inputIconShadowOffsetX,setInputIconShadowOffsetX] = useState(0),
+        [inputIconShadowOffsetY,setInputIconShadowOffsetY] = useState(0),
+        [inputNameBig,setInputNameBig] = useState("名前(上)"),
+        [inputNameSmall,setInputNameSmall] = useState("名前(下)"),
+        [inputNameBigFont,setInputNameBigFont] = useState("normal 600 100px Arial, \"ＭＳ Ｐゴシック\", \"MS PGothic\", MSPGothic, MS-PGothic"),
+        [inputNameSmallFont,setInputNameSmallFont] = useState("normal 100 20px Arial, \"ＭＳ Ｐゴシック\", \"MS PGothic\", MSPGothic, MS-PGothic");
     useEffect(()=>{
         if (isElement(canvas.current)) {
             canvasdrawer.current = new CanvasDrawer(canvas.current);
         }
     },[canvas]);
-    useEffect(()=>{
-        if (isElement(inputBackground.current)){
-            console.log(inputBackground.current)
-            inputBackground.current.onchange=(e)=>{
-                const fileData = e.target.files[0];
-                const reader = new FileReader();
-                // ファイル読み込みに成功したときの処理
-                reader.onload = function() {
-                    // ブラウザ上に画像を表示する
-                    const img = document.createElement('img');
-                    img.src = reader.result;
-                    img.onload=()=>{
-                        canvasdrawer.current.backgroundImage=img;
-                        canvasdrawer.current.updateCanvas();
-                    }
+    const inputFileOnChange = (e) => {
+        const fileData = e.target.files[0];
+        const reader = new FileReader();
+        // ファイル読み込みに成功したときの処理
+        reader.onload = function() {
+            // ブラウザ上に画像を表示する
+            const img = document.createElement('img');
+            img.src = reader.result;
+            img.onload=()=>{
+                if (e.target.id==="background"){
+                    canvasdrawer.current.backgroundImage=img;
+                }else{
+                    canvasdrawer.current.iconImage=img;
                 }
-                // ファイル読み込みを実行
-                reader.readAsDataURL(fileData);
+                canvasdrawer.current.updateCanvas();
             }
         }
-    },[inputBackground]);
+        // ファイル読み込みを実行
+        reader.readAsDataURL(fileData);
+    }
     const inputBackgroundScaleOnChange = (e) => {
         setInputBackgroundScale(e.target.value);
         canvasdrawer.current.backgroundScale=e.target.value/100;
@@ -95,6 +106,79 @@ export default function Home() {
         canvasdrawer.current.cardShadowOffsetY=(e.target.value);
         canvasdrawer.current.updateCanvas();
     }
+    const inputIconScaleOnChange = (e) => {
+        setInputIconScale(e.target.value);
+        canvasdrawer.current.iconScale=(e.target.value/100);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconRadiusOnChange = (e) => {
+        setInputIconRadius(e.target.value);
+        canvasdrawer.current.iconRadius=Number(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconBorderOnChange = (e) => {
+        setInputIconBorder(e.target.value);
+        canvasdrawer.current.iconBorder=Number(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconOffsetXOnChange = (e) => {
+        setInputIconOffsetX(e.target.value);
+        canvasdrawer.current.iconOffsetX=Number(e.target.value/100);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconOffsetYOnChange = (e) => {
+        setInputIconOffsetY(e.target.value);
+        canvasdrawer.current.iconOffsetY=Number(e.target.value/100);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconShadowColorOnChange = (e) => {
+        setInputIconShadowColor(e.target.value);
+        canvasdrawer.current.iconShadowColor=(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconShadowBlurOnChange = (e) => {
+        setInputIconShadowBlur(e.target.value);
+        canvasdrawer.current.iconShadowBlur=Number(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconShadowOffsetXOnChange = (e) => {
+        setInputIconShadowOffsetX(e.target.value);
+        canvasdrawer.current.iconShadowOffsetX=Number(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputIconShadowOffsetYOnChange = (e) => {
+        setInputIconShadowOffsetY(e.target.value);
+        canvasdrawer.current.iconShadowOffsetY=Number(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputNameBigOnChange = (e) => {
+        setInputNameBig(e.target.value);
+        canvasdrawer.current.nameBig=(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputNameSmallOnChange = (e) => {
+        setInputNameSmall(e.target.value);
+        canvasdrawer.current.nameSmall=(e.target.value);
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputNameBigColorOnChange = (e) => {
+        canvasdrawer.current.nameBigColor=e.target.value;
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputNameBigFontOnChange = (e) => {
+        setInputNameBigFont(e.target.value)
+        canvasdrawer.current.nameBigFont=e.target.value;
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputNameSmallColorOnChange = (e) => {
+        canvasdrawer.current.nameSmallColor=e.target.value;
+        canvasdrawer.current.updateCanvas();
+    }
+    const inputNameSmallFontOnChange = (e) => {
+        setInputNameSmallFont(e.target.value)
+        canvasdrawer.current.nameSmallFont=e.target.value;
+        canvasdrawer.current.updateCanvas();
+    }
     return (
         <>
             <Head>
@@ -109,10 +193,21 @@ export default function Home() {
                 <div className={Styles.inputWrapper}>
                     <div className={Styles.inputContainer}>
                         <h2>背景</h2>
-                        <p><input type="file" accept={"image/*"} ref={inputBackground}/></p>
-                        <p><InputRange min={0} max={200} step={1} value={inputBackgroundScale} onchange={inputBackgroundScaleOnChange} unit={"%"}/></p>
-                        <p><InputRange min={-200} max={200} step={1} value={inputBackgroundPosX} onchange={inputBackgroundPosXOnChange} unit={"%"}/></p>
-                        <p><InputRange min={-200} max={200} step={1} value={inputBackgroundPosY} onchange={inputBackgroundPosYOnChange} unit={"%"}/></p>
+                        <p><input type="file" accept={"image/*"} onChange={inputFileOnChange} id={"background"}/></p>
+                        <table>
+                            <tr>
+                                <th>サイズ</th>
+                                <td><InputRange min={0} max={200} step={1} value={inputBackgroundScale} onchange={inputBackgroundScaleOnChange} unit={"%"}/></td>
+                            </tr>
+                            <tr>
+                                <th>横</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputBackgroundPosX} onchange={inputBackgroundPosXOnChange} unit={"%"}/></td>
+                            </tr>
+                            <tr>
+                                <th>縦</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputBackgroundPosY} onchange={inputBackgroundPosYOnChange} unit={"%"}/></td>
+                            </tr>
+                        </table>
                     </div>
                     <div className={Styles.inputContainer}>
                         <h2>カード</h2>
@@ -134,11 +229,93 @@ export default function Home() {
                             </tr>
                             <tr>
                                 <th>横ズレ</th>
-                                <td><InputRange min={-200} max={200} step={1} value={inputCardShadowOffsetX} onchange={inputCardShadowOffsetXOnChange} unit={"%"}/></td>
+                                <td><InputRange min={-200} max={200} step={1} value={inputCardShadowOffsetX} onchange={inputCardShadowOffsetXOnChange} unit={"px"}/></td>
                             </tr>
                             <tr>
                                 <th>縦ズレ</th>
-                                <td><InputRange min={-200} max={200} step={1} value={inputCardShadowOffsetY} onchange={inputCardShadowOffsetYOnChange} unit={"%"}/></td>
+                                <td><InputRange min={-200} max={200} step={1} value={inputCardShadowOffsetY} onchange={inputCardShadowOffsetYOnChange} unit={"px"}/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div className={Styles.inputContainer}>
+                        <h2>アイコン</h2>
+
+                        <table>
+                            <tr>
+                                <th>ファイル</th>
+                                <td><label><input type="file" accept={"image/*"} onChange={inputFileOnChange} id={"icon"}/></label></td>
+                            </tr>
+                            <tr>
+                                <th>拡大率</th>
+                                <td><InputRange min={0} max={200} step={1} value={inputIconScale} onchange={inputIconScaleOnChange} unit={"%"}/></td>
+                            </tr>
+                            <tr>
+                                <th>角</th>
+                                <td><InputRange min={0} max={150} step={1} value={inputIconRadius} onchange={inputIconRadiusOnChange} unit={"px"}/></td>
+                            </tr>
+                            <tr>
+                                <th>縁</th>
+                                <td><InputRange min={0} max={50} step={1} value={inputIconBorder} onchange={inputIconBorderOnChange} unit={"px"}/></td>
+                            </tr>
+                            <tr>
+                                <th>横</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputIconOffsetX} onchange={inputIconOffsetXOnChange} unit={"px"}/></td>
+                            </tr>
+                            <tr>
+                                <th>縦</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputIconOffsetY} onchange={inputIconOffsetYOnChange} unit={"px"}/></td>
+                            </tr>
+                        </table>
+                        <h3>影</h3>
+                        <table>
+                            <tr>
+                                <th>色</th>
+                                <td><label><input type="color" value={inputIconShadowColor} onChange={inputIconShadowColorOnChange}/></label></td>
+                            </tr>
+                            <tr>
+                                <th>ぼかし</th>
+                                <td><InputRange min={0} max={200} step={1} value={inputIconShadowBlur} onchange={inputIconShadowBlurOnChange} unit={"px"}/></td>
+                            </tr>
+                            <tr>
+                                <th>横ズレ</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputIconShadowOffsetX} onchange={inputIconShadowOffsetXOnChange} unit={"px"}/></td>
+                            </tr>
+                            <tr>
+                                <th>縦ズレ</th>
+                                <td><InputRange min={-200} max={200} step={1} value={inputIconShadowOffsetY} onchange={inputIconShadowOffsetYOnChange} unit={"px"}/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div className={Styles.inputContainer}>
+                        <h2>名前</h2>
+                        <h3>上</h3>
+                        <table>
+                            <tr>
+                                <th>内容</th>
+                                <td><input type="text" value={inputNameBig} onChange={inputNameBigOnChange}/></td>
+                            </tr>
+                            <tr>
+                                <th>フォント</th>
+                                <td><input type="text" value={inputNameBigFont} onChange={inputNameBigFontOnChange}/></td>
+                            </tr>
+                            <tr>
+                                <th>色</th>
+                                <td><input type="color" onChange={inputNameBigColorOnChange}/></td>
+                            </tr>
+                        </table>
+                        <h3>下</h3>
+                        <table>
+                            <tr>
+                                <th>内容</th>
+                                <td><input type="text" value={inputNameSmall} onChange={inputNameSmallOnChange}/></td>
+                            </tr>
+                            <tr>
+                                <th>フォント</th>
+                                <td><input type="text" value={inputNameSmallFont} onChange={inputNameSmallFontOnChange}/></td>
+                            </tr>
+                            <tr>
+                                <th>色</th>
+                                <td><input type="color" onChange={inputNameSmallColorOnChange}/></td>
                             </tr>
                         </table>
                     </div>
