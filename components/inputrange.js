@@ -1,6 +1,7 @@
 import Styles from '@/styles/InputRange.module.scss'
 import {useState} from "react";
 export default function InputRange ({min="unset",max="unset",step="unset",value,defaultValue=0,onchange,unit,itemid=null}) {
+    const [localValue,setLocalValue] = useState(defaultValue);
     if (value){
         return (
             <div className={Styles.wrapper}>
@@ -13,7 +14,6 @@ export default function InputRange ({min="unset",max="unset",step="unset",value,
             </div>
         )
     }else{
-        const [localValue,setLocalValue] = useState(defaultValue);
         const localOnChange = (e) => {
             setLocalValue(e.target.value);
             onchange(e);
