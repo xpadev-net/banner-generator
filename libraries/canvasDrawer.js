@@ -25,10 +25,14 @@ class CanvasDrawer {
         this.iconShadowOffsetY=0;
         this.nameBig="名前(上)";
         this.nameBigColor="#000000";
-        this.nameBigFont=`normal 600 100px Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic`;
+        this.nameBigFont=`normal 500 100px MPlusMedium,Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic`;
         this.nameSmall="名前(下)";
         this.nameSmallColor="#000000";
-        this.nameSmallFont=`normal 100 20px Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic`;
+        this.nameSmallFont=`normal 100 20px MPlusLight,Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic`;
+        this.links=[{image:null,text:""}];
+        this.linksSize=70;
+        this.linksFont=`normal 100 35px MPlusLight,Arial, "ＭＳ Ｐゴシック", "MS PGothic", MSPGothic, MS-PGothic`;
+        this.skills=[];
         this.context.textBaseline="middle";
         this.updateCanvas();
     }
@@ -43,7 +47,6 @@ class CanvasDrawer {
         this.context.arc(posX+radius,posY+radius,radius,Math.PI*1.5,Math.PI,true);
     }
     updateCanvas(){
-        this.context.save();
         this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
         this.context.fillStyle="#c0c0c0";
         this.context.shadowBlur=0;
@@ -84,11 +87,13 @@ class CanvasDrawer {
         this.context.stroke();
         this.context.fill();
         if (this.iconImage){
+            this.context.save();
             this.context.beginPath();
             this.context.lineWidth = 1;
             this.drawsq(200+this.iconBorder,100+this.iconBorder,300-this.iconBorder*2,300-this.iconBorder*2,this.iconRadius-this.iconBorder);
             this.context.clip();
             this.context.drawImage(this.iconImage,0,0,this.iconImage.width,this.iconImage.height,200+this.iconOffsetX*this.iconImage.width,100+this.iconOffsetY*this.iconImage.height,this.iconImage.width*this.iconScale,this.iconImage.height*this.iconScale);
+            this.context.restore();
         }
         this.context.shadowBlur=0;
         this.context.shadowOffsetX=0;
@@ -99,7 +104,34 @@ class CanvasDrawer {
         this.context.fillStyle=this.nameSmallColor;
         this.context.font=this.nameSmallFont;
         this.context.fillText(this.nameSmall,600,330);
-        this.context.restore();
+        this.context.font=this.linksFont;
+        let basePoxY = 250-(this.links.length)*this.linksSize/2;
+        for (let i in this.links){
+            let value = this.links[i];
+            this.context.fillStyle="#ffffff";
+            this.context.shadowBlur=5;
+            this.context.shadowOffsetX=0;
+            this.context.shadowOffsetY=0;
+            this.context.beginPath();
+            this.context.lineWidth = 1;
+            this.drawsq(1075,basePoxY+i*this.linksSize+10,this.linksSize-20,this.linksSize-20,5);
+            this.context.closePath();
+            this.context.fill();
+            if (value.image){
+                this.context.save();
+                this.context.beginPath();
+                this.context.lineWidth = 1;
+                this.drawsq(1075,basePoxY+i*this.linksSize+10,this.linksSize-20,this.linksSize-20,5);
+                this.context.clip();
+                this.context.drawImage(value.image,0,0,value.image.width,value.image.height,1075+value.offsetX*value.image.width,(basePoxY+i*this.linksSize+10)+value.offsetY*value.image.height,value.image.width*value.scale,value.image.height*value.scale);
+                this.context.restore();
+            }
+            this.context.shadowBlur=0;
+            this.context.shadowOffsetX=0;
+            this.context.shadowOffsetY=0;
+            this.context.fillStyle="#000000";
+            this.context.fillText(value.text,1140,basePoxY+i*this.linksSize+this.linksSize/2);
+        }
     }
 }
 export default CanvasDrawer;

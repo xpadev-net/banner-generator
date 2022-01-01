@@ -16,3 +16,12 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: 'MPlusLight';
+  src: url(/MPLUS1p-Light.ttf);
+}
+@font-face {
+  font-family: 'MPlusMedium';
+  src: url(/MPLUS1p-Medium.ttf);
+}
